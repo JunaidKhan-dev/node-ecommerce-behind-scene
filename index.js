@@ -1,12 +1,28 @@
 const express = require('express')
 const app = express()
 
+const usersRepo = require('./repositories/users')
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-app.post('/', (req, res) => {
-  console.log(req.body)
-  res.send('created account')
+app.post('/', async (req, res) => {
+  try {
+    const { email, password, passwordConfirm } = req.body
+    // check if email already exists
+    const existUser = await usersRepo.getOneBy({ email: email })
+    if (existUser) {
+      return res.send('user already exists')
+    }
+    // check if password and passwordConfirm are not same
+    if (password !== passwordConfirm) return res.send('password not match')
+    // create a new user
+
+    res.send('created account')
+  } catch (error) {
+    console.log(error)
+    res.send(error.message)
+  }
 })
 
 app.get('/', (req, res) => {

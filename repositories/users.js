@@ -81,16 +81,6 @@ class Users {
   }
 }
 
-const test = async () => {
-  const newUserFile = new Users('users.json')
-  // await newUserFile.create({ email: 'test@test.com', password: 1234 })
-  // const records = await newUserFile.getAll()
-  // console.log('process done', records)
-  // const user = await newUserFile.getOne('1df3bef1')
-  // await newUserFile.delete('1df3bef1')
-  // await newUserFile.update('98e786', { password: 'my new pass' })
-  // const user = await newUserFile.getOneBy({ id: 'd9e244bc' })
-  // console.log('user?:', user)
-}
+const repo = new Users('users.json')
 
-test()
+module.exports = repo

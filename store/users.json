@@ -1,27 +1,3 @@
 [
-  {
-    "email": "test@test.com",
-    "password": "my new pass",
-    "id": "98e7868b"
-  },
-  {
-    "email": "test@test.com",
-    "password": 1234,
-    "id": "867ab2bf"
-  },
-  {
-    "email": "meow@test.com",
-    "password": 1234,
-    "id": "d9e244bc"
-  },
-  {
-    "email": "test@test.com",
-    "password": 1234,
-    "id": "10e40255"
-  },
-  {
-    "email": "test@test.com",
-    "password": 1234,
-    "id": "f16d85bd"
-  }
+  {"email":"test@test.com"}
 ]
