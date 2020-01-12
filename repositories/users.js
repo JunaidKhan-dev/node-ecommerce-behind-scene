@@ -1,6 +1,8 @@
 const path = require('path')
 const fs = require('fs')
 const crypto = require('crypto')
+const util = require('util')
+const scrypt = util.promisify(crypto.scrypt)
 
 class Users {
   constructor (filename) {
@@ -18,6 +20,12 @@ class Users {
     return JSON.parse(await fs.promises.readFile(`${this.dirPath}/${this.filename}`, { encoding: 'utf-8' }))
   }
 
+  async comparePassword (saved, supplied) {
+    const [hashedPassword, salt] = saved.split('.')
+    const hashedSuppliedBuf = await scrypt(supplied, salt, 64)
+    return hashedPassword === hashedSuppliedBuf.toString('hex')
+  }
+
   async writeAll (data) {
     try {
       await fs.promises.writeFile(`${this.dirPath}/${this.filename}`, JSON.stringify(data, null, 2))
@@ -33,9 +41,18 @@ class Users {
   async create (newUser) {
     newUser.id = this.randomId()
     const records = await this.getAll()
-    records.push(newUser)
+    const salt = crypto.randomBytes(8).toString('hex')
+    const hashedBuf = await scrypt(newUser.password, salt, 64)
+    const hashedPassword = hashedBuf.toString('hex')
+    const user = {
+      ...newUser,
+      password: `${hashedPassword}.${salt}`
+
+    }
+    records.push(user)
     await this.writeAll(records)
     console.log('New Users created')
+    return user
   }
 
   async getOne (id) {
