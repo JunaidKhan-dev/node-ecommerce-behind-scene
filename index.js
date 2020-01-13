@@ -2,7 +2,6 @@ const express = require('express')
 const app = express()
 const cookieSession = require('cookie-session')
 
-
 const authRoutes = require('./routes/admin/auth')
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
