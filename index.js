@@ -4,6 +4,7 @@ const cookieSession = require('cookie-session')
 
 const authRoutes = require('./routes/admin/auth')
 app.use(express.json())
+app.use(express.static('public'))
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieSession({
   keys: ['abcdefghzyxvwuabcdef']
