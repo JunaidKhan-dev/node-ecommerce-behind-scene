@@ -29,7 +29,7 @@ router.post('/signup', [
 
   req.session.userId = newUser.id
 
-  res.send('created account')
+  res.redirect('/admin/products')
 })
 
 router.get('/signup', (req, res) => {
@@ -81,7 +81,7 @@ router.post('/signin', [
     const user = await usersRepo.getOneBy({ email: email })
     req.session.userId = user.id
 
-    res.send('you are signed in')
+    res.redirect('/admin/products')
   } catch (error) {
     res.send(error.message)
   }
