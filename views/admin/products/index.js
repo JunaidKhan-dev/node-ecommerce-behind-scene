@@ -8,7 +8,7 @@ module.exports = ({ products }) => {
         <td>${product.title}</td>
         <td>${product.price}</td>
         <td>
-          <a href="">
+          <a href="/admin/products/${product.slug}/edit">
             <button class="button is-link">
               Edit
             </button>
@@ -26,7 +26,7 @@ module.exports = ({ products }) => {
     content: `
       <div class="control">
         <h1 class="subtitle">Products</h1>  
-        <a href="/admin/products/new" class="button is-primary">New Product</a>
+        <a href="/admin/product/new" class="button is-primary">New Product</a>
       </div>
       <table class="table">
         <thead>

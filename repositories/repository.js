@@ -1,6 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 const crypto = require('crypto')
+const slugify = require('slugify')
 
 class Repository {
   constructor (filename) {
@@ -19,10 +20,10 @@ class Repository {
   }
 
   async create (newItem) {
-
     const records = await this.getAll()
+    const id = this.randomId()
 
-    records.push({ id: this.randomId(), ...newItem })
+    records.push({ id: id, slug: slugify(`${newItem.title}-${id}`, { lower: true }), ...newItem })
     await this.writeAll(records)
     console.log('New Item created')
     return newItem
