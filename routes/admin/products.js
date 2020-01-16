@@ -6,6 +6,7 @@ const { checkTitle, checkPrice } = require('./validators')
 const productsRepo = require('../../repositories/products')
 const productNewTemplate = require('../../views/admin/products/new')
 const productsIndexTemplate = require('../../views/admin/products')
+const productEditTemplate = require('../../views/admin/products/edit')
 const { requireAuth } = require('./middlewares')
 
 const router = express.Router()
@@ -42,4 +43,38 @@ router.post('/admin/product/new', requireAuth, upload.single('image'), [checkTit
   }
 })
 
+router.get('/admin/products/:slug/edit', requireAuth, async (req, res) => {
+  const productIdInit = req.params.slug.split('-')
+  const productId = productIdInit[productIdInit.length - 1]
+  const product = await productsRepo.getOne(productId)
+  if (!product) return res.send('Product Not Found')
+
+  res.send(productEditTemplate({ product }))
+})
+
+router.post('/admin/products/:slug/edit',
+  requireAuth,
+  upload.single('image'),
+  [checkTitle, checkPrice],
+  async (req, res) => {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      console.log(errors)
+      return res.send(productEditTemplate({ errors }))
+    } else {
+      const changes = req.body
+      if (req.file) {
+        changes.image = req.file.buffer.toString('base64')
+      }
+      const productIdInit = req.params.slug.split('-')
+      const productId = productIdInit[productIdInit.length - 1]
+      try {
+        await productsRepo.update(productId, changes)
+      } catch (error) {
+        return res.send('Product not found')
+      }
+
+      res.redirect('/admin/products')
+    }
+  })
 module.exports = router
