@@ -1,5 +1,5 @@
 const layout = require('../layout')
-const {getErrors} = require('../../../helpers')
+const { getErrors } = require('../../../helpers')
 module.exports = ({ product, errors }) => {
   return layout({
     content: `
