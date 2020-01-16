@@ -58,16 +58,19 @@ router.post('/admin/products/:slug/edit',
   [checkTitle, checkPrice],
   async (req, res) => {
     const errors = validationResult(req)
+    const productIdInit = req.params.slug.split('-')
+    const productId = productIdInit[productIdInit.length - 1]
+    const product = await productsRepo.getOne(productId)
+    if (!product) return res.send('product not found')
+
     if (!errors.isEmpty()) {
       console.log(errors)
-      return res.send(productEditTemplate({ errors }))
+      return res.send(productEditTemplate({ product, errors }))
     } else {
       const changes = req.body
       if (req.file) {
         changes.image = req.file.buffer.toString('base64')
       }
-      const productIdInit = req.params.slug.split('-')
-      const productId = productIdInit[productIdInit.length - 1]
       try {
         await productsRepo.update(productId, changes)
       } catch (error) {
@@ -77,4 +80,12 @@ router.post('/admin/products/:slug/edit',
       res.redirect('/admin/products')
     }
   })
+
+router.post('/admin/products/:slug/delete', requireAuth, async (req, res) => {
+  const productIdInit = req.params.slug.split('-')
+  const productId = productIdInit[productIdInit.length - 1]
+  await productsRepo.delete(productId)
+  res.redirect('/admin/products')
+})
+
 module.exports = router

@@ -15,7 +15,9 @@ module.exports = ({ products }) => {
           </a>
         </td>
         <td>
-          <button class="button is-danger">Delete</button>
+        <form method='POST' action='/admin/products/${product.slug}/delete'>
+          <button type='submit' class="button is-danger">Delete</button>
+        </form>
         </td>
       </tr>
     `
@@ -43,4 +45,4 @@ module.exports = ({ products }) => {
       </table>
     `
   })
-};
+}
