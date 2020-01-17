@@ -19,14 +19,21 @@ class Repository {
     return crypto.randomBytes(4).toString('hex')
   }
 
+  async getOne (id) {
+    const records = await this.getAll()
+    const record = records.find(record => record.id === id)
+    return record
+  }
+
   async create (newItem) {
     const records = await this.getAll()
     const id = this.randomId()
-
-    records.push({ id: id, slug: slugify(`${newItem.title}-${id}`, { lower: true }), ...newItem })
+    const itemToAdd = { id: id, slug: slugify(`${newItem.title}-${id}`, { lower: true }), ...newItem }
+    records.push(itemToAdd)
     await this.writeAll(records)
+
     console.log('New Item created')
-    return newItem
+    return itemToAdd
   }
 
   async getAll () {
@@ -39,12 +46,6 @@ class Repository {
     } catch (error) {
       throw new Error('Write Error', error)
     }
-  }
-
-  async getOne (id) {
-    const records = await this.getAll()
-    const record = records.find(record => record.id === id)
-    return record
   }
 
   async delete (id) {

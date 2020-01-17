@@ -1,0 +1,17 @@
+[
+  {
+    "id": "73c467a5",
+    "slug": "cart-73c467a5",
+    "title": "cart",
+    "items": [
+      {
+        "id": "ac3d7258",
+        "quantity": 3
+      },
+      {
+        "id": "e7fccbd5",
+        "quantity": 2
+      }
+    ]
+  }
+]

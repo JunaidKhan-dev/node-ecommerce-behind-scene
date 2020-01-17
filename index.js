@@ -5,6 +5,7 @@ const cookieSession = require('cookie-session')
 const authRoutes = require('./routes/admin/auth')
 const adminProductsRoutes = require('./routes/admin/products')
 const productsRoutes = require('./routes/products')
+const cartsRoutes = require('./routes/carts')
 
 app.use(express.json())
 app.use(express.static('public'))
@@ -15,6 +16,7 @@ app.use(cookieSession({
 
 app.use(authRoutes)
 app.use(adminProductsRoutes)
+app.use(cartsRoutes)
 app.use(productsRoutes)
 
 const port = process.env.PORT || 4000
