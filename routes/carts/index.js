@@ -36,7 +36,7 @@ router.post('/cart/products', async (req, res) => {
   await cartRepo.update(cart.id, {
     items: cart.items
   })
-  res.send('cart done')
+  res.redirect('/cart')
 })
 
 // recive a GET req to show all items in cart
@@ -55,8 +55,15 @@ router.get('/cart', async (req, res) => {
   }
   res.send(cartShowTemplate({ items: cart.items }))
 })
-// Recieve a post req to delete an item from a
-router.post('/cartadd', async (req, res) => {
-  res.send('cart added')
+
+// Recieve a post req to delete an item
+router.post('/cart/products/delete', async (req, res) => {
+  const productId = req.body.productId
+  // get the cartId for the current user via session
+  const cart = await cartRepo.getOne(req.session.cartId)
+  // loop through cartItems and remove the item match to productId
+  const items = cart.items.filter(item => item.id !== productId)
+  await cartRepo.update(req.session.cartId, { items: items })
+  res.redirect('/cart')
 })
 module.exports = router
